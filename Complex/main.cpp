@@ -3,48 +3,83 @@
 #include <exception>
 #include <stdexcept>
 #include <utility>
+#include <string>
+#include <cstdlib>
+#include <ctime>
 
 #include "Complex.h"
 
-int main()
-{                  
-    Complex<float> x (1, 2);
-    Complex<float> y (1, 2);                
-    std::cout << "x = " << x << std::endl;
-    std::cout << "y = " << y << std::endl;
+int failed = 0;
 
-    std::cout << "Ops" << std::endl;
-    try 
-    {
-        std::cout << x << " + " << y        << " = " << x + y << std::endl; 
-        std::cout << x << " - " << y        << " = " << x - y << std::endl;     
-        std::cout << x << " * " << y        << " = " << x * y << std::endl;      
-        std::cout << x << " / " << y.real() << " = " << x / y.real() << std::endl;
-    }
-    catch (const std::invalid_argument &ex) 
-    {
-        std::cerr << ex.what() << std::endl;
-    }
+template <typename T>
+std::string to_str (const Complex<T> &x)
+{
+    return "(" + std::to_string (x.real()) + ", " + std::to_string (x.imag()) + ")";
+}
 
-    std::cout << "abs" << std::endl;
-    try 
+template <typename T>
+void TestEqual (Complex<T> left, Complex<T> right)
+{
+    if (left != right)
     {
-        std::cout << "(x + y).abs()      = " << (x + y).abs() << std::endl;
-        std::cout << "(x - y).abs()      = " << (x - y).abs() << std::endl;
-        std::cout << "(x * y).abs()      = " << (x * y).abs() << std::endl;  
-        std::cout << "(x / y.real).abs() = " << (x / y.real()).abs() << std::endl;   
+        std::cerr << "Failed: " << to_str (left) << " == " + to_str (right) << std::endl;
+        ++failed;
     }
-    catch (const std::invalid_argument &ex) 
-    {
-        std::cerr << ex.what() << std::endl;
-    }   
+}
 
-    std::cout << "Move" << std::endl;
+int rand_num_mod_1000()
+{
+    int rnd = std::rand() % 1000;
+    return rnd;
+}
+
+#define TestEqual_(l, r) 
+
+int main (int argc, char *argv[])
+{       
+    std::srand (std::time(nullptr));
+    if (argc != 2)
     {
-        Complex<float> new_y = std::move (y);
-        std::cout << "y     =" << y << std::endl;
-        std::cout << "new_y = "<< new_y << std::endl;
+        std::cerr << "Usage: " << argv[0] << " <number-of-tests>" << std::endl; 
+        exit (1);
     }
 
-    return 0;
+    const int n_tests = strtoll (argv[1], NULL, 10);
+
+    for (int i = 0; i < n_tests; ++i)
+    {           
+        {
+            int r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
+            int r2 = rand_num_mod_1000(), i2 = rand_num_mod_1000();
+            TestEqual<int> (Complex<int>{r1, i1} + Complex<int>{r2, i2}, Complex<int>{r1 + r2, i1 + i2});
+
+        }
+        {
+            int r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
+            int r2 = rand_num_mod_1000(), i2 = rand_num_mod_1000();
+            TestEqual<int> (Complex<int>{r1, i1} - Complex<int>{r2, i2}, Complex<int>{r1 - r2, i1 - i2});
+
+        }
+        {
+            int r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
+            int r2 = rand_num_mod_1000(), i2 = rand_num_mod_1000();
+            TestEqual<int> (Complex<int>{r1, i1} * Complex<int>{r2, i2}, Complex<int>{r1*r2 - i1*i2, i1 + i2});
+        }   
+        {
+            int r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
+            int r  = rand_num_mod_1000();
+            TestEqual<int> (Complex<int>{r1, i1} / r, Complex<int>{r1/r, i1/r});
+        }     
+    }
+
+    if (failed)
+    {
+        std::cerr << "Failed " << failed << " tests.\n";
+    }
+    else 
+    {
+        std::cerr << "All " << n_tests << " tests was passed successfully.\n";
+    }
+
+    return failed;
 }

@@ -9,22 +9,22 @@ template <typename T>
 class Complex
 {
 public:
-    T  real() const { return r_; }
-    T  imag() const { return i_; }
-    T& real()       { return r_; }
-    T& imag()       { return i_; }
+    T  real() const { return re_; }
+    T  imag() const { return im_; }
+    T& real()       { return re_; }
+    T& imag()       { return im_; }
 
     Complex() :
-        r_ (0), i_ (0)
+        re_ (0), im_ (0)
     {
     }
     Complex (const T& real) :
-        r_ (real), i_ (0)
+        re_ (real), im_ (0)
     {
     }
     
     Complex (const T& real, const T& imag) :
-        r_ (real), i_ (imag)
+        re_ (real), im_ (imag)
     {
     }
 
@@ -75,6 +75,11 @@ public:
         return Complex<T>(left) - right;
     }
 
+    Complex<T> operator -() const
+    {
+        return Complex<T> (-real(), -imag());
+    }
+
     Complex<T> &operator -= (const Complex<T> &another)
     {
         *this = *this - another;
@@ -113,10 +118,15 @@ public:
         return *this;
     }
 
-    //std::ostream &operator << (std::ostream &os) const
-    //{
-    //    return os << real() << ',' << imag();
-    //}
+    bool operator == (const Complex<T> &another) const
+    {
+        return real() == another.real() && imag() == another.imag();
+    }
+
+    bool operator != (const Complex<T> &another) const
+    {
+        return !(*this == another);
+    }
 
     friend std::ostream &operator << (std::ostream &os, const Complex<T> &x)
     {
@@ -129,8 +139,8 @@ public:
     }
 
 private:
-    T r_;
-    T i_;
+    T re_;
+    T im_;
 };
 
 #endif
