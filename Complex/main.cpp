@@ -11,14 +11,12 @@
 
 int failed = 0;
 
-template <typename T>
-std::string to_str (const Complex<T> &x)
+std::string to_str (const Complex &x)
 {
     return "(" + std::to_string (x.real()) + ", " + std::to_string (x.imag()) + ")";
 }
 
-template <typename T>
-void TestEqual (Complex<T> left, Complex<T> right)
+void TestEqual (Complex left, Complex right)
 {
     if (left != right)
     {
@@ -49,26 +47,27 @@ int main (int argc, char *argv[])
     for (int i = 0; i < n_tests; ++i)
     {           
         {
-            int r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
-            int r2 = rand_num_mod_1000(), i2 = rand_num_mod_1000();
-            TestEqual<int> (Complex<int>{r1, i1} + Complex<int>{r2, i2}, Complex<int>{r1 + r2, i1 + i2});
+            double r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
+            double r2 = rand_num_mod_1000(), i2 = rand_num_mod_1000();
+            TestEqual (Complex {r1, i1} + Complex {r2, i2}, Complex {r1 + r2, i1 + i2});
 
         }
         {
-            int r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
-            int r2 = rand_num_mod_1000(), i2 = rand_num_mod_1000();
-            TestEqual<int> (Complex<int>{r1, i1} - Complex<int>{r2, i2}, Complex<int>{r1 - r2, i1 - i2});
+            double r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
+            double r2 = rand_num_mod_1000(), i2 = rand_num_mod_1000();
+            TestEqual (Complex {r1, i1} - Complex {r2, i2}, Complex {r1 - r2, i1 - i2});
 
         }
         {
-            int r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
-            int r2 = rand_num_mod_1000(), i2 = rand_num_mod_1000();
-            TestEqual<int> (Complex<int>{r1, i1} * Complex<int>{r2, i2}, Complex<int>{r1*r2 - i1*i2, i1 + i2});
+            double r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
+            double r2 = rand_num_mod_1000(), i2 = rand_num_mod_1000();
+            TestEqual (Complex {r1, i1} * Complex {r2, i2}, Complex {r1*r2 - i1*i2, i1 + i2});
         }   
         {
-            int r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
-            int r  = rand_num_mod_1000();
-            TestEqual<int> (Complex<int>{r1, i1} / r, Complex<int>{r1/r, i1/r});
+            double r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
+            double r  = rand_num_mod_1000();
+            if (r == 0) r = n_tests;
+            TestEqual (Complex {r1, i1} / r, Complex {r1/r, i1/r});
         }     
     }
 
