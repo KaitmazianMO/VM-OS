@@ -16,16 +16,18 @@ std::string to_str (const Complex &x)
     return "(" + std::to_string (x.real()) + ", " + std::to_string (x.imag()) + ")";
 }
 
-void TestEqual (Complex left, Complex right)
+bool TestEqual (Complex left, Complex right)
 {
     if (left != right)
     {
-        std::cerr << "Failed: " << to_str (left) << " == " + to_str (right) << std::endl;
+        std::cerr << "Failed: " << to_str (left) << " != " + to_str (right) << std::endl;
         ++failed;
+        return false;
     }
+    return true;
 }
 
-int rand_num_mod_1000()
+double rand_num_mod_1000()
 {
     int rnd = std::rand() % 1000;
     return rnd;
@@ -43,31 +45,37 @@ int main (int argc, char *argv[])
     }
 
     const int n_tests = strtoll (argv[1], NULL, 10);
-
     for (int i = 0; i < n_tests; ++i)
-    {           
+    {       
         {
-            double r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
-            double r2 = rand_num_mod_1000(), i2 = rand_num_mod_1000();
-            TestEqual (Complex {r1, i1} + Complex {r2, i2}, Complex {r1 + r2, i1 + i2});
-
+            Complex num {rand_num_mod_1000(), rand_num_mod_1000()};
+            if (!TestEqual (num, num))
+                std::cout << "Is equal operator test failed" << std::endl;
         }
         {
             double r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
             double r2 = rand_num_mod_1000(), i2 = rand_num_mod_1000();
-            TestEqual (Complex {r1, i1} - Complex {r2, i2}, Complex {r1 - r2, i1 - i2});
-
+            if (!TestEqual (Complex {r1, i1} + Complex {r2, i2}, Complex {r1 + r2, i1 + i2}))
+                std::cout << "Plus operator test failed" << std::endl;
         }
         {
             double r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
             double r2 = rand_num_mod_1000(), i2 = rand_num_mod_1000();
-            TestEqual (Complex {r1, i1} * Complex {r2, i2}, Complex {r1*r2 - i1*i2, i1 + i2});
+            if (!TestEqual (Complex {r1, i1} - Complex {r2, i2}, Complex {r1 - r2, i1 - i2}))
+                std::cout << "Minus operator test failed" << std::endl;
+        }
+        {
+            double r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
+            double r2 = rand_num_mod_1000(), i2 = rand_num_mod_1000();
+            if (!TestEqual (Complex {r1, i1} * Complex {r2, i2}, Complex {r1*r2 - i1*i2, i1 + i2}))
+                std::cout << "Multiply operator test failed" << std::endl;
         }   
         {
             double r1 = rand_num_mod_1000(), i1 = rand_num_mod_1000();
             double r  = rand_num_mod_1000();
-            if (r == 0) r = n_tests;
-            TestEqual (Complex {r1, i1} / r, Complex {r1/r, i1/r});
+            if (r == 0) r = n_tests; // avoid zero devidng
+            if (!TestEqual (Complex {r1, i1} / r, Complex {r1/r, i1/r}))
+                std::cout << "Devisor operator test failed" << std::endl;
         }     
     }
 

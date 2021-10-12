@@ -33,8 +33,8 @@
     {
         real() = another.real();
         imag() = another.imag();
-        another.real() = 0;
-        another.imag() = 0;
+        another.real() = 0; // moved
+        another.imag() = 0; // moved
     }
 
     Complex Complex::operator + (const Complex &another) const

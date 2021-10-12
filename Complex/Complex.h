@@ -1,7 +1,13 @@
 #ifndef COMPLEX_H_INCLUDED
 #define COMPLEX_H_INCLUDED
 
-#include <iostream>
+#include <iostream> 
+/*
+namespace std
+{
+    class ostream;
+}
+*/
 
 class Complex
 {
@@ -32,8 +38,9 @@ public:
     Complex &      operator /= (double re);
     bool           operator == (const Complex &another) const;
     bool           operator != (const Complex &another) const;
+    double         abs();
     friend std::ostream &operator << (std::ostream &os, const Complex &x);
-    double abs();
+
 private:
     double re_;
     double im_;
