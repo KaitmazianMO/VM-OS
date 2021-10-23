@@ -5,7 +5,7 @@
 #include <cstdlib>
 
 inline size_t to_bytes(size_t nbits) {
-    return nbits / CHAR_BIT + (nbits % CHAR_BIT) ? 1 : 0;
+    return nbits / CHAR_BIT + ((nbits % CHAR_BIT) ? 1 : 0);
 }
 
 inline bool get_bit(const byte_t *arr, size_t idx) {
@@ -15,7 +15,7 @@ inline bool get_bit(const byte_t *arr, size_t idx) {
 inline void set_bit(byte_t *arr, size_t idx, bool val) {
     if (val)
         arr[idx / CHAR_BIT] |= (1u << (idx % CHAR_BIT));
-    else
+    else 
         arr[idx / CHAR_BIT] &= ~(1u << (idx % CHAR_BIT));
 }
 
@@ -31,7 +31,8 @@ void Stack<bool>::push(bool val) {
     if (top_ == cap_) {
         auto new_buff = allocate(grow_coefficient * cap_);
         for (size_t i = 0; i < top_; ++i) {
-            new_buff[i] = buff_[i];
+            set_bit (new_buff, i, get_bit (buff_, i));
+            //new_buff[i] = buff_[i];
         }
         deallocate(buff_);
         buff_ = new_buff;
@@ -53,6 +54,18 @@ bool Stack<bool>::top() const {
 
 Stack<bool>::~Stack<bool>() {
     deallocate(buff_);
+    cleanUp();
+}
+
+void Stack<bool>::deepCopy (const Stack<bool> &another) {
+    buff_ = allocate (another.top_);
+    cap_  = another.top_;
+    for (size_t i = 0; i < cap_; ++i) {
+        push (get_bit (another.buff_, i));
+    }    
+}
+
+void Stack<bool>::cleanUp() {
     buff_ = nullptr;
     cap_ = 0;
     top_ = 0;
