@@ -48,7 +48,7 @@ void Stack<bool>::pop() {
 
 bool Stack<bool>::top() const {
     assert(top_ != 0);
-    return get_bit(buff_, top_ - 1); 
+    return get_bit(buff_, top_ - 1);
 }
 
 Stack<bool>::~Stack<bool>() {
