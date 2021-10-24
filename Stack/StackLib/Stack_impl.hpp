@@ -1,6 +1,6 @@
-#include "Stack.h"
-
 #include <cassert>
+
+#include "Stack.h"
 
 template <typename T>
 Stack<T>::Stack(size_t cap) : buff_(allocate(cap)), cap_(cap), top_(0) {}
@@ -22,35 +22,36 @@ void Stack<T>::push(const T &val) {
 
 template <typename T>
 Stack<T>::Stack(const Stack<T> &another) {
-    deepCopy (another);    
+    deepCopy(another);
 }
 
 template <typename T>
 Stack<T>::Stack(Stack<T> &&another) {
-    lightCopy (another);
+    lightCopy(another);
     another.cleanUp();
 }
 
 template <typename T>
-void Stack<T>::deepCopy (const Stack<T> &another) {
-    buff_ = allocate (another.top_);
-    cap_  = another.top_;
+void Stack<T>::deepCopy(const Stack<T> &another) {
+    buff_ = allocate(another.top_);
+    cap_ = another.top_;
     for (size_t i = 0; i < cap_; ++i) {
-        push (another.buff_[i]);
+        push(another.buff_[i]);
     }
 }
 
 template <typename T>
-void Stack<T>::lightCopy (const Stack<T> &another) {
+void Stack<T>::lightCopy(const Stack<T> &another) {
     buff_ = another.buff_;
-    cap_  = another.cap_;
+    cap_ = another.cap_;
     top_ = another.top_;
 }
 
 template <typename T>
-Stack<T> &Stack<T>::operator = (Stack<T> &another) {
-    this->~Stack();
-    this->deepCopy (another);
+Stack<T> &Stack<T>::operator=(Stack<T> &another) {
+    deallocate(buff_);
+    cleanUp();
+    deepCopy(another);
 
     return *this;
 }

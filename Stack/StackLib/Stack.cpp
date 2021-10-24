@@ -15,7 +15,7 @@ inline bool get_bit(const byte_t *arr, size_t idx) {
 inline void set_bit(byte_t *arr, size_t idx, bool val) {
     if (val)
         arr[idx / CHAR_BIT] |= (1u << (idx % CHAR_BIT));
-    else 
+    else
         arr[idx / CHAR_BIT] &= ~(1u << (idx % CHAR_BIT));
 }
 
@@ -23,16 +23,34 @@ byte_t *Stack<bool>::allocate(size_t nbits) const {
     return new byte_t[to_bytes(nbits)];
 }
 
-void Stack<bool>::deallocate(byte_t *data) const { delete[] data; }
+void Stack<bool>::deallocate(byte_t *data) const {
+    delete[] data;
+}
 
 Stack<bool>::Stack(size_t cap) : buff_(allocate(cap)), cap_(cap), top_(0) {}
+
+Stack<bool>::Stack(const Stack<bool> &another) {
+    deepCopy(another);
+}
+
+Stack<bool>::Stack(Stack<bool> &&another) {
+    lightCopy(another);
+    another.cleanUp();
+}
+
+Stack<bool> &Stack<bool>::operator=(Stack<bool> &another) {
+    deallocate(buff_);
+    cleanUp();
+    deepCopy(another);
+
+    return *this;
+}
 
 void Stack<bool>::push(bool val) {
     if (top_ == cap_) {
         auto new_buff = allocate(grow_coefficient * cap_);
         for (size_t i = 0; i < top_; ++i) {
-            set_bit (new_buff, i, get_bit (buff_, i));
-            //new_buff[i] = buff_[i];
+            set_bit(new_buff, i, get_bit(buff_, i));
         }
         deallocate(buff_);
         buff_ = new_buff;
@@ -57,12 +75,18 @@ Stack<bool>::~Stack<bool>() {
     cleanUp();
 }
 
-void Stack<bool>::deepCopy (const Stack<bool> &another) {
-    buff_ = allocate (another.top_);
-    cap_  = another.top_;
+void Stack<bool>::deepCopy(const Stack<bool> &another) {
+    buff_ = allocate(another.top_);
+    cap_ = another.top_;
     for (size_t i = 0; i < cap_; ++i) {
-        push (get_bit (another.buff_, i));
-    }    
+        push(get_bit(another.buff_, i));
+    }
+}
+
+void Stack<bool>::lightCopy(const Stack<bool> &another) {
+    buff_ = another.buff_;
+    cap_ = another.cap_;
+    top_ = another.top_;
 }
 
 void Stack<bool>::cleanUp() {
@@ -71,4 +95,6 @@ void Stack<bool>::cleanUp() {
     top_ = 0;
 }
 
-bool Stack<bool>::isEmpty() const { return top_ == 0; }
+bool Stack<bool>::isEmpty() const {
+    return top_ == 0;
+}

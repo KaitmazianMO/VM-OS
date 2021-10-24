@@ -1,8 +1,8 @@
 #ifndef STACK_H_INCLUDED
 #define STACK_H_INCLUDED
 
-#include <cstdlib>
 #include <cstdint>
+#include <cstdlib>
 
 template <typename T>
 class Stack {
@@ -13,7 +13,7 @@ class Stack {
     explicit Stack(size_t cap = default_capacity);
     Stack(const Stack<T> &another);
     Stack(Stack<T> &&another);
-    Stack &operator = (Stack<T>& another);
+    Stack &operator=(Stack<T> &another);
     ~Stack();
 
     void push(const T &val);
@@ -28,8 +28,8 @@ class Stack {
     size_t cap_;
     size_t top_;
 
-    void deepCopy (const Stack<T> &another);
-    void lightCopy (const Stack<T> &another);
+    void deepCopy(const Stack<T> &another);
+    void lightCopy(const Stack<T> &another);
     void cleanUp();
     T *allocate(size_t n) const;
     void deallocate(T *data) const;
@@ -60,7 +60,8 @@ class Stack<bool> {
     size_t cap_;
     size_t top_;
 
-    void deepCopy (const Stack<bool> &another);
+    void deepCopy(const Stack<bool> &another);
+    void lightCopy(const Stack<bool> &another);
     void cleanUp();
     byte_t *allocate(size_t n) const;
     void deallocate(byte_t *data) const;
