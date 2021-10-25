@@ -2,6 +2,4 @@
 
 #include "../StackLib/Stack_impl.hpp"
 
-int main() {
-    
-}
+int main() {}
