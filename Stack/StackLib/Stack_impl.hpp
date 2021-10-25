@@ -1,6 +1,6 @@
 #include <cassert>
 
-#include "Stack.h"
+#include "Stack.hpp"
 
 template <typename T>
 Stack<T>::Stack(size_t cap) : buff_(allocate(cap)), cap_(cap), top_(0) {}

@@ -1,4 +1,4 @@
-#include "Stack.h"
+#include "Stack.hpp"
 
 #include <cassert>
 #include <climits>

@@ -17,6 +17,8 @@ int main() {
     auto stk_to_copy = stk;
     auto stk_to_move = std::move(stk);
     stk_to_copy = stk_to_move;
+    Stack<bool> copy = stk_spec;
+    copy = stk_spec;
 
     // for (size_t i = 0; i < n_iter; ++i) {
     //    stk.push(i);
