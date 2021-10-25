@@ -4,7 +4,7 @@ add_compile_options(-Wall -Wextra -pedantic -Werror)
 
 add_library(
     Stack SHARED
-    Stack.h
+    Stack.hpp
     Stack.cpp
     Stack_impl.hpp
 )

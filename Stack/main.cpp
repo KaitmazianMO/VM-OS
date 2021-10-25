@@ -32,9 +32,9 @@ int main() {
 
     std::cout << "Run action" << std::endl;
 
-    for (size_t i = 0; i < n_iter; ++i) {
-        stk_spec.push(i % 3 == 0);
-    }
+    //for (size_t i = 0; i < n_iter; ++i) {
+    //    stk_spec.push(i % 3 == 0);
+    //}
 
     std::cout << "spec dump:" << std::endl;
     while (!stk_spec.isEmpty()) {
