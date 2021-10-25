@@ -4,9 +4,11 @@
 #include <cstdint>
 #include <cstdlib>
 
+class StackTest;
+
 template <typename T>
 class Stack {
-   public:
+public:
     static constexpr size_t grow_coefficient = 2;
     static constexpr size_t default_capacity = 32;
 
@@ -23,7 +25,7 @@ class Stack {
 
     bool isEmpty() const;
 
-   private:
+private:
     T *buff_;
     size_t cap_;
     size_t top_;
@@ -39,7 +41,7 @@ using byte_t = uint8_t;
 
 template <>
 class Stack<bool> {
-   public:
+public:
     static constexpr size_t grow_coefficient = 2;
     static constexpr size_t default_capacity = 32;
 
@@ -55,7 +57,7 @@ class Stack<bool> {
 
     bool isEmpty() const;
 
-   private:
+private:
     byte_t *buff_;
     size_t cap_;
     size_t top_;
