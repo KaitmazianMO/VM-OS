@@ -46,14 +46,47 @@ public:
     }
 };
 
-TEST_F(StackTest, EmptyStackPop) {
+TEST_F(StackTest, PushTop) {
     Stack<int> stk_int;
     Stack<double> stk_double;
     Stack<bool> stk_bool;
+
+    stk_int.push(42);
+    ASSERT_EQ(42, stk_int.top());
     
-    ASSERT_DEATH({stk_int.pop();}, ""); 
-    ASSERT_DEATH({stk_double.pop();}, ""); 
-    ASSERT_DEATH({stk_bool.pop();}, ""); 
+    stk_double.push(1.41);
+    ASSERT_DOUBLE_EQ(1.41, stk_double.top());
+    
+    stk_bool.push(true);
+    ASSERT_EQ(true, stk_bool.top());
+}
+
+TEST_F(StackTest, EmptyStackPop) {
+    {
+        Stack<int> stk_int;
+        Stack<double> stk_double;
+        Stack<bool> stk_bool;
+        
+        ASSERT_DEATH({stk_int.pop();}, ""); 
+        ASSERT_DEATH({stk_double.pop();}, ""); 
+        ASSERT_DEATH({stk_bool.pop();}, ""); 
+    }
+    {
+        Stack<int> stk_int;
+        Stack<double> stk_double;
+        Stack<bool> stk_bool;
+        
+        stk_int.push(1);
+        stk_double.push(1);
+        stk_bool.push(1);
+        stk_int.pop();
+        stk_double.pop();
+        stk_bool.pop();
+    
+        ASSERT_DEATH({stk_int.pop();}, ""); 
+        ASSERT_DEATH({stk_double.pop();}, ""); 
+        ASSERT_DEATH({stk_bool.pop();}, "");
+    }     
 }
 
 TEST_F(StackTest, EmptyStackTop) {
@@ -67,13 +100,13 @@ TEST_F(StackTest, EmptyStackTop) {
 }
 
 TEST_F(StackTest, ComputeDiscriminant) {
-    auto discr_pair = DiscriminantByFormulaAndByStack(__LINE__, 2*__LINE__, __LINE__);
+    auto discr_pair = DiscriminantByFormulaAndByStack<double>(__LINE__, 2*__LINE__, __LINE__);
     ASSERT_DOUBLE_EQ(discr_pair.first, discr_pair.second);     
 
-    discr_pair = DiscriminantByFormulaAndByStack(5*__LINE__, 2*__LINE__, 9*__LINE__);
+    discr_pair = DiscriminantByFormulaAndByStack<double>(5*__LINE__, 2*__LINE__, 9*__LINE__);
     ASSERT_DOUBLE_EQ(discr_pair.first, discr_pair.second); 
     
-    discr_pair = DiscriminantByFormulaAndByStack(__LINE__*__LINE__, 99*__LINE__, -55*__LINE__);
+    discr_pair = DiscriminantByFormulaAndByStack<double>(__LINE__*__LINE__, 99*__LINE__, -55*__LINE__);
     ASSERT_DOUBLE_EQ(discr_pair.first, discr_pair.second);          
 }
 
