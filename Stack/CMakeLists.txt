@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(PROJECT_NAME Main)
+set(PROJECT_NAME TheStack)
 project(${PROJECT_NAME})
 
 find_program(CLANG_FORMAT clang-format)
@@ -16,14 +16,4 @@ endif()
 
 add_compile_options(-Wall -Wextra -pedantic -Werror)
 
-add_executable(${PROJECT_NAME} main.cpp)
-
-add_subdirectory(StackLib)
-target_link_libraries(${PROJECT_NAME} Stack)
-
 add_subdirectory(Test)
-gtest_add_tests(
-    TARGET       unit_test
-    TEST_SUFFIX .noArgs
-    TEST_LIST    noArgsTests
-)

@@ -1,12 +1,20 @@
-cmake_minimum_required(VERSION 3.16)
+enable_testing()
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
 
-set(PROJECT_NAME unit_test)
+set(PROJECT_NAME unit-tests)
 project(${PROJECT_NAME})
 
-include(GoogleTest)
+add_executable(
+    ${PROJECT_NAME}
+    main.cpp
+)
 
-add_compile_options(-Wall -Wextra -pedantic -Werror -O0)
+target_link_libraries(
+    ${PROJECT_NAME}
+    Stack
+    GTest::Main
+)
 
-add_executable(${PROJECT_NAME} main.cpp)
+gtest_discover_tests(unit-tests)
 
-target_link_libraries(${PROJECT_NAME} Stack GTest::GTest GTest::Main)
